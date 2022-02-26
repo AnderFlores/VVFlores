@@ -36,4 +36,13 @@ class StringCalculatorKataTest extends TestCase
         $result = $this->stringCalculatorKata->add($number);
         $this->assertEquals($number, $result);
     }
+    /**
+     * @test
+     */
+    public function when_two_numbers_separated_by_comas_given_returns_their_sum()
+    {
+        $numbers = "1,2";
+        $result = $this->stringCalculatorKata->add($numbers);
+        $this->assertEquals("3", $result);
+    }
 }
