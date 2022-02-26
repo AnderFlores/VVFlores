@@ -4,8 +4,16 @@ namespace Deg540\PHPTestingBoilerplate;
 
 class StringCalculatorKata
 {
-    public function add(String $number): String
+    public function add(String $numbers): String
     {
-        return "0";
+        if (empty($numbers)) {
+            return "0";
+        }
+        $array = explode(",", $numbers);
+        $result = 0;
+        for ($i = 0; $i < sizeof($array); $i++) {
+            $result += $array[$i];
+        }
+        return $result;
     }
 }
