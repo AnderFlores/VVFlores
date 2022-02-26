@@ -54,4 +54,13 @@ class StringCalculatorKataTest extends TestCase
         $result = $this->stringCalculatorKata->add($numbers);
         $this->assertEquals("6", $result);
     }
+    /**
+     * @test
+     */
+    public function when_two_numbers_separated_by_new_line_given_returns_their_sum()
+    {
+        $numbers = "1\n2";
+        $result = $this->stringCalculatorKata->add($numbers);
+        $this->assertEquals("3", $result);
+    }
 }
