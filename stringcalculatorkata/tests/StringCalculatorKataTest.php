@@ -27,4 +27,13 @@ class StringCalculatorKataTest extends TestCase
         $result = $this->stringCalculatorKata->add("");
         $this->assertEquals("0", $result);
     }
+    /**
+     * @test
+     */
+    public function when_single_number_given_returns_same_number()
+    {
+        $number = "1";
+        $result = $this->stringCalculatorKata->add($number);
+        $this->assertEquals($number, $result);
+    }
 }
