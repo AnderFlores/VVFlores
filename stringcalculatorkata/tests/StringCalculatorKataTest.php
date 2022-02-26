@@ -63,4 +63,14 @@ class StringCalculatorKataTest extends TestCase
         $result = $this->stringCalculatorKata->add($numbers);
         $this->assertEquals("3", $result);
     }
+
+    /**
+     * @test
+     */
+    public function when_three_numbers_separated_by_comas_and_new_lines_given_returns_their_sum()
+    {
+        $numbers = "1,2\n3";
+        $result = $this->stringCalculatorKata->add($numbers);
+        $this->assertEquals("6", $result);
+    }
 }
