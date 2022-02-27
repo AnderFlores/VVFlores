@@ -113,4 +113,13 @@ class StringCalculatorKataTest extends TestCase
             $this->assertEquals("Negative not allowed : -1, -2", $ex->getMessage());
         }
     }
+    /**
+     * @test
+     */
+    public function when_numbers_separated_by_custom_delimiter_given_returns_their_sum()
+    {
+        $numbers = "//;\n1;2;3";
+        $result = $this->stringCalculatorKata->add($numbers);
+        $this->assertEquals("6", $result);
+    }
 }
