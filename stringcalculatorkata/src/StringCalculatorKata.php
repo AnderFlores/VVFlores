@@ -6,21 +6,30 @@ use PHPUnit\Util\Exception;
 
 class StringCalculatorKata
 {
-    public function add(String $numbers): String
+    public function add(String $numbersToSum): String
     {
-        if (empty($numbers)) {
+        if (empty($numbersToSum)) {
             return "0";
         }
         $delimiter = ',';
-        if ($this->checkCustomDelimiter($numbers)) {
-            $delimiter = $this->getCustomDelimiter($numbers);
-            $numbers = $this->getNumbers($numbers);
+        if ($this->checkCustomDelimiter($numbersToSum)) {
+            $delimiter = $this->getCustomDelimiter($numbersToSum);
+            $numbersToSum = $this->getNumbers($numbersToSum);
         }
-        $arrayNumbers = $this->splitNumbersByDelimiters($numbers, $delimiter);
+        if (str_ends_with($numbersToSum, $delimiter)) {
+            throw new Exception("Number expected but EOF found");
+        }
+        $arrayNumbers = $this->splitNumbersByDelimiters($numbersToSum, $delimiter);
         $this->checkNegatives($arrayNumbers);
         $result = 0;
         foreach ($arrayNumbers as $number) {
-            $result += $number;
+            if (!is_numeric($number)) {
+                $nonNumericCharacter = preg_replace("/[0-9.]/", "", $number);
+                $posNonNumericCharacter = strpos($numbersToSum, $nonNumericCharacter);
+                throw new Exception("'" . $delimiter . "' expected but '" . $nonNumericCharacter . "' found at position " . $posNonNumericCharacter);
+            } else {
+                $result += $number;
+            }
         }
         return $result;
     }
@@ -32,7 +41,7 @@ class StringCalculatorKata
 
     private function getCustomDelimiter(String $numbersWithCustomDelimiter): String
     {
-        return substr($numbersWithCustomDelimiter, 2, strpos($numbersWithCustomDelimiter, "\n") - 1);
+        return substr($numbersWithCustomDelimiter, 2, strpos($numbersWithCustomDelimiter, "\n") - 2);
     }
 
     private function splitNumbersByDelimiters(String $numbers, String $delimiters): array
@@ -49,8 +58,10 @@ class StringCalculatorKata
     {
         $negativeNumbers = "";
         foreach ($arrayNumbers as $number) {
-            if ($number < 0) {
-                $negativeNumbers .= $number . ", ";
+            if (is_numeric($number)) {
+                if ($number < 0) {
+                    $negativeNumbers .= $number . ", ";
+                }
             }
         }
         if (!empty($negativeNumbers)) {
