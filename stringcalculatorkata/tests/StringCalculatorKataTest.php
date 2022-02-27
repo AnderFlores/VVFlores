@@ -2,6 +2,7 @@
 namespace Deg540\PHPTestingBoilerplate\Test;
 
 use Deg540\PHPTestingBoilerplate\StringCalculatorKata;
+use PHPUnit\Exception;
 use PHPUnit\Framework\TestCase;
 
 class StringCalculatorKataTest extends TestCase
@@ -72,5 +73,18 @@ class StringCalculatorKataTest extends TestCase
         $numbers = "1,2\n3";
         $result = $this->stringCalculatorKata->add($numbers);
         $this->assertEquals("6", $result);
+    }
+
+    /**
+     * @test
+     */
+    public function when_negative_number_given_returns_exception()
+    {
+        $numbers = "-1";
+        try {
+            $result = $this->stringCalculatorKata->add($numbers);
+        } catch (Exception $ex) {
+            $this->assertEquals("Negative not allowed : -1", $ex->getMessage());
+        }
     }
 }
