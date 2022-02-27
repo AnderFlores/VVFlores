@@ -87,4 +87,17 @@ class StringCalculatorKataTest extends TestCase
             $this->assertEquals("Negative not allowed : -1", $ex->getMessage());
         }
     }
+
+    /**
+     * @test
+     */
+    public function when_multiple_negative_numbers_given_returns_exception()
+    {
+        $numbers = "-1,-2";
+        try {
+            $result = $this->stringCalculatorKata->add($numbers);
+        } catch (Exception $ex) {
+            $this->assertEquals("Negative not allowed : -1, -2", $ex->getMessage());
+        }
+    }
 }
