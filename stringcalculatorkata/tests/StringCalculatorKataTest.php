@@ -122,4 +122,30 @@ class StringCalculatorKataTest extends TestCase
         $result = $this->stringCalculatorKata->add($numbers);
         $this->assertEquals("6", $result);
     }
+
+    /**
+     * @test
+     */
+    public function when_numbers_end_by_delimiter_given_returns_exception()
+    {
+        $numbers = "1,2,";
+        try {
+            $result = $this->stringCalculatorKata->add($numbers);
+        } catch (Exception $ex) {
+            $this->assertEquals("Number expected but EOF found", $ex->getMessage());
+        }
+    }
+
+    /**
+     * @test
+     */
+    public function when_numbers_separated_by_custom_delimiter_and_other_delimiters_given_returns_exception()
+    {
+        $numbers = "//;\n1;2,4";
+        try {
+            $result = $this->stringCalculatorKata->add($numbers);
+        } catch (Exception $ex) {
+            $this->assertEquals("';' expected but ',' found at position 3", $ex->getMessage());
+        }
+    }
 }
