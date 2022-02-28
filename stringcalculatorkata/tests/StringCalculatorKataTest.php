@@ -118,7 +118,7 @@ class StringCalculatorKataTest extends TestCase
      */
     public function when_numbers_separated_by_custom_delimiter_given_returns_their_sum()
     {
-        $numbers = "//;\n1;2;3";
+        $numbers = "//exp\n1exp2exp3";
         $result = $this->stringCalculatorKata->add($numbers);
         $this->assertEquals("6", $result);
     }
