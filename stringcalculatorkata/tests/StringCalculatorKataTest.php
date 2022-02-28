@@ -161,4 +161,17 @@ class StringCalculatorKataTest extends TestCase
             $this->assertEquals("Number expected but EOF found\nNegative not allowed : -1", $ex->getMessage());
         }
     }
+
+    /**
+     * @test
+     */
+    public function when_numbers_with_consecutive_delimiters_given_returns_exception()
+    {
+        $numbers = "1,,2";
+        try {
+            $result = $this->stringCalculatorKata->add($numbers);
+        } catch (Exception $ex) {
+            $this->assertEquals("Number expected but ',' found at position 2", $ex->getMessage());
+        }
+    }
 }
