@@ -22,6 +22,7 @@ class StringCalculatorKata
         } catch (Exception $ex) {
             $errors .= $ex->getMessage() . "\n";
         }
+        $this->checkConsecutiveDelimiters($numbersToSum, $delimiter);
         $arrayNumbers = $this->splitNumbersByDelimiters($numbersToSum, $delimiter);
         try {
             $this->checkNegatives($arrayNumbers);
@@ -72,6 +73,23 @@ class StringCalculatorKata
     {
         if (str_ends_with($numbersToSum, $delimiter)) {
             throw new Exception("Number expected but EOF found");
+        }
+    }
+
+    private function checkConsecutiveDelimiters(String $numbersToSum, String $delimiter): void
+    {
+        if (str_contains($numbersToSum, $delimiter . $delimiter)) {
+            $posConsecutiveDelimiter = strpos($numbersToSum, $delimiter . $delimiter) + 1;
+            throw new Exception("Number expected but '" . $delimiter . "' found at position " . $posConsecutiveDelimiter);
+        } elseif (str_contains($numbersToSum, "\n" . $delimiter)) {
+            $posConsecutiveDelimiter = strpos($numbersToSum, "\n" . $delimiter) + 1;
+            throw new Exception("Number expected but '" . $delimiter . "' found at position " . $posConsecutiveDelimiter);
+        } elseif (str_contains($numbersToSum, "\n\n")) {
+            $posConsecutiveDelimiter = strpos($numbersToSum, "\n\n") + 1;
+            throw new Exception("Number expected but '\n' found at position " . $posConsecutiveDelimiter);
+        } elseif (str_contains($numbersToSum, $delimiter . "\n")) {
+            $posConsecutiveDelimiter = strpos($numbersToSum, $delimiter . "\n") + 1;
+            throw new Exception("Number expected but '\n' found at position " . $posConsecutiveDelimiter);
         }
     }
 
