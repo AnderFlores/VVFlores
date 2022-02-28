@@ -11,25 +11,39 @@ class StringCalculatorKata
         if (empty($numbersToSum)) {
             return "0";
         }
+        $errors = "";
         $delimiter = ',';
         if ($this->checkCustomDelimiter($numbersToSum)) {
             $delimiter = $this->getCustomDelimiter($numbersToSum);
             $numbersToSum = $this->getNumbers($numbersToSum);
         }
-        if (str_ends_with($numbersToSum, $delimiter)) {
-            throw new Exception("Number expected but EOF found");
+        try {
+            $this->checkEndOfNumbers($numbersToSum, $delimiter);
+        } catch (Exception $ex) {
+            $errors .= $ex->getMessage() . "\n";
         }
         $arrayNumbers = $this->splitNumbersByDelimiters($numbersToSum, $delimiter);
-        $this->checkNegatives($arrayNumbers);
+        try {
+            $this->checkNegatives($arrayNumbers);
+        } catch (Exception $ex) {
+            $errors .= $ex->getMessage() . "\n";
+        }
         $result = 0;
         foreach ($arrayNumbers as $number) {
-            if (!is_numeric($number)) {
-                $nonNumericCharacter = preg_replace("/[0-9.]/", "", $number);
-                $posNonNumericCharacter = strpos($numbersToSum, $nonNumericCharacter);
-                throw new Exception("'" . $delimiter . "' expected but '" . $nonNumericCharacter . "' found at position " . $posNonNumericCharacter);
-            } else {
-                $result += $number;
+            if (!empty($number)) {
+                if (!is_numeric($number)) {
+                    try {
+                        $this->hasInvalidDelimiter($number, $numbersToSum, $delimiter);
+                    } catch (Exception $ex) {
+                        $errors .= $ex->getMessage() . "\n";
+                    }
+                } else {
+                    $result += $number;
+                }
             }
+        }
+        if (!empty($errors)) {
+            $this->throwErrors($errors);
         }
         return $result;
     }
@@ -54,6 +68,13 @@ class StringCalculatorKata
         return substr($numbersWithCustomDelimiter, strpos($numbersWithCustomDelimiter, "\n") + 1);
     }
 
+    private function checkEndOfNumbers(String $numbersToSum, String $delimiter): void
+    {
+        if (str_ends_with($numbersToSum, $delimiter)) {
+            throw new Exception("Number expected but EOF found");
+        }
+    }
+
     private function checkNegatives(array $arrayNumbers): void
     {
         $negativeNumbers = "";
@@ -68,5 +89,18 @@ class StringCalculatorKata
             $negativeNumbers = substr($negativeNumbers, 0, strlen($negativeNumbers) - 2);
             throw new Exception("Negative not allowed : " . $negativeNumbers);
         }
+    }
+
+    private function hasInvalidDelimiter($number, $numbersToSum, $delimiter): void
+    {
+        $invalidDelimiter = preg_replace("/[0-9.]/", "", $number);
+        $posInvalidDelimiter = strpos($numbersToSum, $invalidDelimiter);
+        throw new Exception("'" . $delimiter . "' expected but '" . $invalidDelimiter . "' found at position " . $posInvalidDelimiter);
+    }
+
+    private function throwErrors($errors): void
+    {
+        $errors = substr($errors, 0, strlen($errors) - 1);
+        throw new Exception($errors);
     }
 }
